@@ -1,0 +1,3 @@
+.modalFooter {
+  @apply flex items-center justify-end p-2 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600;
+}
