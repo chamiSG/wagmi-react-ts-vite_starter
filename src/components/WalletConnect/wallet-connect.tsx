@@ -1,12 +1,9 @@
-import { forwardRef, ComponentProps, useEffect } from "react";
-import { useAccount, useConnect } from 'wagmi';
+import { forwardRef, ComponentProps } from "react";
+import { useConnect } from 'wagmi';
 import MetamaskIcon from "./icons/metamask";
 import CoinbaseWalletIcon from "./icons/coinbasewallet";
 import useAuth from "../../hooks/useAuth";
 import OkxWalletIcon from "./icons/okxwallet";
-import PhantomWalletIcon from "./icons/phantom";
-import useModal from "../../hooks/useModal";
-import Modal from "../Modal/modal";
 
 interface WalletConnectProps extends Omit<ComponentProps<"div">, "className"> {
   isOpen?: boolean;
@@ -20,15 +17,11 @@ const WalletConnect = forwardRef<
 >(({ isOpen, onHandle, onClose, children, ...rest }, ref) => {
 
   const { connectors } = useConnect();
-  const { login, isLoading } = useAuth();
-  const { isOpen: isLoadingModal, onOpen: onOpenLoadingModal, onClose: onCloseLoadingModal } = useModal()
+  const { login } = useAuth();
 
   const connectWallet = async (connectorId: any) => {
     await login(connectorId);
     onClose();
-    if (isLoading) {
-      onOpenLoadingModal()
-    }
   };
 
   return (
@@ -65,10 +58,7 @@ const WalletConnect = forwardRef<
                       {connector.name === "Okx" &&
                         <OkxWalletIcon />
                       }
-
-                      {connector.name === "Phantom" &&
-                        <PhantomWalletIcon />
-                      }
+                     
                       <span className="flex-1 ml-3 text-left whitespace-nowrap capitalize">{connector.name}</span>
                       {connector.ready && connector.name === "MetaMask" &&
                         <span className="inline-flex items-center justify-center px-2 py-0.5 ml-3 text-xs font-medium text-gray-500 bg-gray-200 rounded dark:bg-gray-700 dark:text-gray-400">Popular</span>
@@ -85,26 +75,6 @@ const WalletConnect = forwardRef<
         </div>
       </div>
       <div className={`bg-gray-900 bg-opacity-50 dark:bg-opacity-90 fixed inset-0 z-40 transition-all ${isOpen ? '' : 'hidden'}`}></div>
-
-      <Modal isOpen={isLoadingModal} onClose={onCloseLoadingModal} isHeader={false} isFooter={false}>
-        <div className="p-6 flex flex-col items-center">
-          <div className="flex items-center justify-center relative ">
-            <MetamaskIcon className="h-14 relative" />
-            <div className="absolute w-24 h-24 border-l-2 border-brand-500 rounded-full animate-spin">
-            </div>
-            {/* {connector.name === "MetaMask" && */}
-
-            {/* } */}
-            {/* {connector.name === "Coinbase Wallet" &&
-                <CoinbaseWalletIcon />
-              } */}
-          </div>
-          <div className="mt-10 space-y-3">
-            <p className="text-lg font-normal text-gray-900 dark:text-white">Connecting to your wallet</p>
-            <p className="text-sm font-normal text-gray-500 dark:text-gray-400">Click connect in your wallet popup</p>
-          </div>
-        </div>
-      </Modal>
     </>
   );
 });

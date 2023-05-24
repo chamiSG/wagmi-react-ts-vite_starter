@@ -6,7 +6,7 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { polygon } from 'wagmi/chains'
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc'
 import { publicProvider } from 'wagmi/providers/public'
-// import { OkexWalletConnector } from './connectors/OkxWallet'
+import { OkexWalletConnector } from './connectors/OkxWallet'
 // import { PhantomWalletConnector } from './connectors/Phantom'
 // import { OkexWalletConnector } from './connectors/okxWallet'
 
@@ -75,7 +75,7 @@ export const metaMaskConnector = new MetaMaskConnector({
   },
 })
 
-// export const okxConnector = new OkexWalletConnector({ chains })
+export const okxConnector = new OkexWalletConnector({ chains })
 // export const phantomConnector = new PhantomWalletConnector()
 
 export const client = createClient({
@@ -86,7 +86,7 @@ export const client = createClient({
     // phantomConnector,
     coinbaseConnector,
     // walletConnectConnector,
-    // okxConnector
+    okxConnector
     // ontoConnector,
     // injectedConnector,
   ],
